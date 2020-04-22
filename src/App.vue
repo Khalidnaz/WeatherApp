@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ? 'warm' : ''">
+  <div id="app" :class="typeof weather.list != 'undefined'">
     <main>
       <div class="search-box">
         <input 
@@ -11,18 +11,17 @@
         />
       </div>
 
-      <div class="weather-wrap" v-if="typeof weather.main != 'undefined'">
+      <div class="weather-wrap" v-if="typeof weather.list != 'undefined'">
         <div class="location-box">
-          <div class="location">{{ weather.name }}, {{ weather.sys.country }}</div>
-          <div class="date">{{ dateBuilder() }}</div>
+          <div class="location">{{ weather.city.name }}, {{ weather.city.country }}</div>
+          <!-- <div class="date">{{ dateBuilder() }}</div> -->
         </div>
 
         <div class="weather-box">
-          <div class="temp">{{ (Math.round(weather.main.temp) * (9/5) + 32) }}°f</div>
-          <div class="weather">{{ weather.weather[0].main }}</div>
-
-
-     
+          <div class="temp">{{dateBuilder()}}, {{Math.round(weather.list[0].main.temp_max)}}°f</div>
+          <div class="temp">{{dateBuilder2()}}, {{ Math.round(weather.list[1].main.temp_max)}}°f</div>
+          <div class="temp">{{dateBuilder3()}}, {{ Math.round(weather.list[2].main.temp_max)}}°f</div>
+  
         </div>
       </div>
     </main>
@@ -43,7 +42,7 @@ export default {
   methods: {
     fetchWeather (e) {
       if (e.key == "Enter") {
-        fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
+        fetch(`${this.url_base}forecast?q=${this.query}&units=imperial&APPID=${this.api_key}`)
           .then(res => {
             return res.json();
           }).then(this.setResults);
@@ -58,6 +57,28 @@ export default {
       let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       let day = days[d.getDay()];
       let date = d.getDate();
+      let month = months[d.getMonth()];
+      let year = d.getFullYear();
+      return `${day} ${date} ${month} ${year}`;
+    },
+
+      dateBuilder2 () {
+      let d = new Date();
+      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      let day = days[d.getDay() + 1];
+      let date = d.getDate() + 1;
+      let month = months[d.getMonth()];
+      let year = d.getFullYear();
+      return `${day} ${date} ${month} ${year}`;
+    },
+
+      dateBuilder3 () {
+      let d = new Date();
+      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      let day = days[d.getDay() + 2];
+      let date = d.getDate() + 2;
       let month = months[d.getMonth()];
       let year = d.getFullYear();
       return `${day} ${date} ${month} ${year}`;
@@ -151,3 +172,4 @@ main {
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
 }
 </style>
+
