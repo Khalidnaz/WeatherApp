@@ -14,13 +14,13 @@
       <div class="weather-wrap" v-if="typeof weather.list != 'undefined'">
         <div class="location-box">
           <div class="location">{{ weather.city.name }}, {{ weather.city.country }}</div>
-          <!-- <div class="date">{{ dateBuilder() }}</div> -->
+
         </div>
 
         <div class="weather-box">
-          <div class="temp">{{dateBuilder()}}, {{Math.round(weather.list[0].main.temp_max)}}°f</div>
-          <div class="temp">{{dateBuilder2()}}, {{ Math.round(weather.list[1].main.temp_max)}}°f</div>
-          <div class="temp">{{dateBuilder3()}}, {{ Math.round(weather.list[2].main.temp_max)}}°f</div>
+          <div class="temp">{{toDayOfWeek(weather.list[0].dt)}}, {{Math.round(weather.list[0].main.temp_max)}}°f</div>
+          <div class="temp">{{toDayOfWeek(weather.list[4].dt)}}, {{ Math.round(weather.list[4].main.temp_max)}}°f</div>   
+          <div class="temp">{{toDayOfWeek(weather.list[12].dt)}}, {{ Math.round(weather.list[12].main.temp_max)}}°f</div>
   
         </div>
       </div>
@@ -51,37 +51,10 @@ export default {
     setResults (results) {
       this.weather = results;
     },
-    dateBuilder () {
-      let d = new Date();
-      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-      let day = days[d.getDay()];
-      let date = d.getDate();
-      let month = months[d.getMonth()];
-      let year = d.getFullYear();
-      return `${day} ${date} ${month} ${year}`;
-    },
-
-      dateBuilder2 () {
-      let d = new Date();
-      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-      let day = days[d.getDay() + 1];
-      let date = d.getDate() + 1;
-      let month = months[d.getMonth()];
-      let year = d.getFullYear();
-      return `${day} ${date} ${month} ${year}`;
-    },
-
-      dateBuilder3 () {
-      let d = new Date();
-      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-      let day = days[d.getDay() + 2];
-      let date = d.getDate() + 2;
-      let month = months[d.getMonth()];
-      let year = d.getFullYear();
-      return `${day} ${date} ${month} ${year}`;
+      toDayOfWeek(timestamp) {
+      const newDate = new Date(timestamp*1000)
+      const days = ['SUN','MON','TUE','WED','THU','FRI','SAT']
+      return days[newDate.getDay()]
     }
   }
 }
